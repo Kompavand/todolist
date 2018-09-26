@@ -1,23 +1,42 @@
 import React, {Component} from 'react';
 import {TaskList} from './TaskList';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {toggleTask} from "../../actions";
+import {deleteTask} from "../../actions";
+import {updateTask} from "../../actions";
+import {addTask} from "../../actions";
 
-export class TaskListController extends Component {
-    state = {
-        model: this.props.model
-    };
-
-    deleteTask = (id) => this.setState(({model}) => ({model: model.deleteTask(id)}));
-    updateTask = (id, text) => this.setState(({model}) => ({model: model.updateTask(id, text)}));
-    addTask = (text) => this.setState(({model}) => ({model: model.addTask(text)}));
+class TaskListController extends Component {
 
     render() {
         return (
             <TaskList
-                tasks={this.state.model.tasks}
-                deleteTask={this.deleteTask}
-                updateTask={this.updateTask}
-                addTask={this.addTask}
+                tasks={this.props.tasks}
+                deleteTask={this.props.deleteTask}
+                updateTask={this.props.updateTask}
+                addTask={this.props.addTask}
+                toggleTask={this.props.toggleTask}
             />
         )
     };
 }
+
+const mapStateToProps = (state) => {
+    return {
+        tasks: state.tasks
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({
+        toggleTask: toggleTask,
+        deleteTask: deleteTask,
+        updateTask: updateTask,
+        addTask: addTask
+    }, dispatch)
+};
+
+const connectedTaskList = connect(mapStateToProps, mapDispatchToProps)(TaskListController);
+
+export {connectedTaskList};

@@ -1,1 +1,1 @@
-export { TaskListController as TaskList } from './TaskListController'
+export { connectedTaskList as TaskList } from './TaskListController'

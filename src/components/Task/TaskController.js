@@ -5,14 +5,13 @@ import { TaskEdit } from "./TaskEdit";
 
 export class TaskController extends PureComponent {
     state = {
-        text: this.props.text || null,
-        done: false,
-        edit: false
+        edit: false,
+        text: this.props.text
     };
 
     currentStyles = () => {
         const mainStyle = 'p-3 mt-2 rounded ';
-        const color = this.state.done ? 'bg-light text-secondary' : 'bg-primary text-white';
+        const color = this.props.done ? 'bg-light text-secondary' : 'bg-primary text-white';
         return (mainStyle + color)
     };
 
@@ -22,8 +21,10 @@ export class TaskController extends PureComponent {
         this.props.deleteTask(this.props.id);
     };
 
-    // Используется setState(callback) потому, что новый стейт зависит от старого, а setState асинхронный
-    toggleStatus = () => this.setState(({ done }) => ({ done: !done }));
+    toggleStatus = () => {
+        this.props.toggleTask(this.props.id)
+    };
+
     toggleEditMode = () => this.setState(({ edit }) => ({ edit: !edit }));
 
     saveText = () => {
@@ -32,7 +33,7 @@ export class TaskController extends PureComponent {
     };
 
     render() {
-        var className = this.currentStyles();
+        const className = this.currentStyles();
 
         if (this.state.edit) {
             return (
@@ -47,7 +48,7 @@ export class TaskController extends PureComponent {
         return (
             <Task
                 className={className}
-                done={this.state.done}
+                done={this.props.done}
                 text={this.state.text}
                 onChangeDone={this.toggleStatus}
                 onClickEdit={this.toggleEditMode}
